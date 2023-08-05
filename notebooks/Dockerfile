@@ -22,4 +22,5 @@ RUN pip install pandas==1.1.5 \
 	plotly==5.15.0 \
 	scikit-learn==0.24.2 \
 	scipy==1.5.4 \
-	tqdm==4.64.1
+	tqdm==4.64.1 \
+	kaleido==0.2.1
