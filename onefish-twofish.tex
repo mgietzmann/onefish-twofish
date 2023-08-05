@@ -5,6 +5,7 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage[super]{nth}
+\usepackage{float}
 
 \title{One Fish, Two Fish}
 \author{Marcel Gietzmann-Sanders}
@@ -16,7 +17,7 @@
 \newpage
 \chapter{How to Digest a Brick}
 
-\section{The Whole Point}
+\section{Well What's the Point?}
 
 Quantitative fisheries science (hereafter referred to just as fisheries modeling) is all about answer the following question:
 \newline
@@ -136,30 +137,35 @@ In the middle of these two models we need a catch model. This is the model that 
 \rule{\textwidth}{0.5pt} 
 \vspace{5pt}
 
-We've been talking about models quite flippantly so far. But all models are approximations of reality that need to be fit. What does fitting mean? Let's take a super simple example. You know gravity, the thing holding you to the ground right now (unless you're reading this in space, in which case I'm very jealous)? Well while you may take gravity for granted, in high school you learned about a specific model for it - Newton's theory of gravitation. As we've since learned thanks to Einstein, Newton's model breaks down in specific situations, but for the purposes of your being held to the ground the model does just fine. 
+We've been talking about models quite flippantly so far. But all models are approximations of reality that need to be fit. What does fitting mean? Let's take a look at a simple example. One thing that fisheries scientists often have to model is the relationship between age (usually in years $t$) to body length $L$. One such model is the Von Bertalanffy growth curve:
+
+$$L = L_{\infty}(1-e^{-Kt})$$
+
+
+As with all models, this model divides into three parts: input variables - $t$, output variables - $L$, and parameters - $L_{\infty}$ and $K$. The input variables are things we'd measure and the output variables are what we want to predict but in order to do so we need to choose specific values for the parameters. Well you'd start with measurements like in Fig. \ref{fig:length_measurements_by_year}.
+
+
+\begin{figure}[H] 
+  \includegraphics[scale=0.35]{notebooks/Fitting/new_measurements.png}
+  \caption{Average Length Measurements by Year}
+  \label{fig:length_measurements_by_year}
+\end{figure}
+
+Now the question is how do we find the parameters that best "fit" this data? Well from our equation we know that eventually (as $t \rightarrow \infty$) our length will go to $L_\infty$. So looking at this data we can guess that $L_\infty = 0.7$.  
 \newline
 
-And it looks like this:
+However, what value should we assign to $K$? Well what we can do is try several values and see which fits best.
+
+\begin{figure}[H] 
+  \includegraphics[width=\linewidth]{notebooks/Fitting/fit_lines.png}
+  \caption{Attempting to Fit $K$}
+  \label{fig:fitting_K}
+\end{figure}
+
+Fig. \ref{fig:fitting_K} shows us the predicted length vs year relationship for three values of $K$, 0.2, 0.3, and 0.4. By just visual inspection we can see that 0.2 doesn't grow fast enough whereas 0.4 grows to quickly, so 0.3 is probably a reasonable fit.
 \newline
 
-The model divides into three parts:
-
-\begin{enumerate}
-\item Input variables
-\item Output variables
-\item Parameters
-\end{enumerate}
-
-And here's the problem, in order to actually get anything out of this equation those parameters need to be given values. How to set those values? Well what we can do is take a whole bunch of measurements of both input and output values. We can then guess at a value for the parameters in the above equation. Then we can take our measured inputs, pass them through, get our predicted outputs, and evaluate how well we did predicting the outputs. Given what we find we can guess at another set of values for our parameters and repeat until we find the parameters that best fit our data. 
-\newline
-
-This being the real world, they're never going to fit absolutely perfectly (we'll get to what that means for fisheries later) but eventually we'll be able to find the closest fit and voila we have a gravitational constant!
-\newline
-
-This is how fitting works in general - you take real, measured data, and use that to choose the parameters of your model that best that data - the ground truth. And this means something very simple - each of our fisheries models needs ground truth data which in turn means that we need instrumentation for each of them in order to collect that ground truth data. 
-\newline
-
-\textbf{ADD DETAIL TO THIS SECTION}
+In general there are automated mechanisms for doing this but the lesson remains the same - to fit a model you need measurements that can act as ground truth for your fitting (or training) procedure. And that means that for each and every one of our models we're going to need instrumentation to generate that ground truth data. 
 \newpage
 
 \noindent \rule{\textwidth}{0.5pt} 
@@ -175,13 +181,17 @@ This is how fitting works in general - you take real, measured data, and use tha
 \textbf{ADD DETAIL TO THIS SECTION}
 \newpage
 
+Cite:
+textbook
+
+
 \section{Risky Business}
 \newpage
 
 \section{Unparalleled Progress}
 \newpage
 
-\section{The Map}
+\section{Cartography}
 
 
 
