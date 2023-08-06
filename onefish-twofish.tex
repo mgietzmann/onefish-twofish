@@ -178,11 +178,92 @@ In general there are automated mechanisms for doing this but the lesson remains 
 \rule{\textwidth}{0.5pt} 
 \vspace{5pt}
 
-\textbf{ADD DETAIL TO THIS SECTION}
+Alright so we've got ourselves some models that have been fit using the data from the corresponding instrumentation. Now what? Well now we're in a position to use these models to determine what the best fishing practice looks like. Let's take a real simple example to illustrate this.
+\newline
+
+All optimizations begin with clearly parametrizing the boundaries of the management practice. In our case, to keep things simple, we're going to assume that we're just directly controlling fishing mortality $F$. Now the basic population model we'll use will assume that if $Z$ is the overall instantaneous mortality rate for fish, in other words we have:
+
+$$\frac{dN}{dt}=-ZN$$
+
+which more or less reads as - we loose population at a rate of $Z\%$ of the overall population size. This is a pretty standard exponential growth equation whose solution is:
+
+$$N = N_0 e^{-Zt}$$
+
+Next we'll also assume we're in an equilibrium state such that the development of one age group describes the whole population. Therefore in year $t_y$ the population size:
+
+$$N_y = N_0 e^{-Zt_y}$$
+
+Next we're going to make the assumption that our $Z=M+F$ where $M$ is the natural mortality (fit with our instrumentation data). 
+\newline
+
+This gives our population model. How about the catch model? Well we know that $F/Z$ represents the portion of the mortality that ends up as catch. So if the overall fish mortality in an age class $D_y$ is given by:
+
+$$D_y = N_{y-1} - N_y =N_0(e^{-Zt_{y-1}}- e^{-Zt_y})$$
+
+Then the catch for that year class would be $C_y$:
+
+$$C_y = \frac{F}{Z} D_y = \frac{FN_0}{Z}(e^{-Zt_{y-1}}- e^{-Zt_y})$$
+
+Alright we've got our catch model, so what about our benefits model? Once again we're going to make a couple of really sweeping assumptions. First we're going to assume that no matter what we do the 0th year class (i.e. larval class) is always the same size. This is obviously a wild assumption because if $F=1$ there'd by absolutely no fish to create those babies. However we're going to assume that $F=1$ is impossible and therefore not a worry for us. The other assumption we're going to make is that the value of a fish is equal to its length cubed. Basically we're assume that weight and length are connected by the same relationship and that overall catch weight is what matters. Obviously then we need a length model. We'll use a Von Bertalanffy growth curve:
+
+$$L_y = L_{\infty}(1-e^{-Kt_y})$$
+
+Therefore the value of a catch from a specific year class is:
+
+$$V_y = L_y^3C_y$$
+
+And the total value over the whole class is:
+
+$$V = \sum_y V_y$$
+
+If we expand this completely we get:
+
+$$V = \sum_y \frac{FN_0}{F+M}(e^{-(F+M)t_{y-1}}- e^{-(F+M)t_y})(L_{\infty}(1-e^{-Kt_y}))^3$$
+
+Now $L_\infty$, $K$, $M$, and $N_0$ are all parameters we'd need to fit (we're going to assume that's already been done) and therefore the only free variable is $F$ - our management parameter. So $V(F)$ is just a function of our fishing mortality. As a result we can go ahead and plot it! With $L_\infty=1$, $K=0.1$, $M=0.1$, and $N_0=1$ we get Fig. \ref{fig:value_v_F}
+\newline
+
+\begin{figure}[h!] 
+  \includegraphics[width=\linewidth]{notebooks/SimpleOptimization/value_v_F.png}
+  \caption{Value versus Fishing Mortality}
+  \label{fig:value_v_F}
+\end{figure}
+
+And if we walk through this example we can see why optimization is so important. Start at $F=0$ we get an obvious result - if you don't fish you don't derive any value from the fishery. Then as we begin to apply some fishing pressure $F>0$ we can see that the value starts rising rapidly - also expected. However something really interesting happens once we cross $F\approx 0.2$ the value starts to go down! What's going on here? Well it turns out that after a certain point ramping up the fishing pressure starts to kill so many \textit{young} fish that fish aren't able to grow up to the big weights that are more valuable to the fishery. As a result the fishery actually becomes poorer as we put more effort in! More work does not mean more rewards because that extra work actually changes the very demographics of the underlying stock. Super interesting! 
+\newline
+
+Alright, so as we said this was a pretty simple example. Part of what made it so simple was our "management" was parametrized by a single variable $F$. This meant that we could just plot out all of the options and choose the best one. In theory this brute force approach can always work. While as you get to parametrizations that have more 3 parameters you lose the ability to plot things out you can still run through all of the options and pick the best one. However there's a practical problem that quickly arises and its known as the curse of dimensionality. 
+\newline
+
+To illustrate suppose you start with a single parameter case like ours, but one where the parameter is categorical (i.e. it takes on a specific set of values). Maybe that parameter can take on 10 values. This in turn means you need only search $10$ different cases to find your optimal case for sure. 
+\newline
+
+Alright, now suppose that you add another 10 value parameter. How many options do you have to search? Well for each of the original 10 values of our first parameter we need to search the other 10 from this new parameter. So that's $10\bullet 10=100$ different cases. If we add another parameter it becomes $10\bullet 10\bullet 10=1000$ values. You can probably see where this is going... in general $N$ such parameters means $10^N$ cases!
+\newline
+
+This gets computationally inefficient really really fast. So when folks optimize really large problems (with loads of parameters) they instead have to turn to things besides brute force search.
+\newline
+
+Generally speaking there are two categories - analytic and meta-heuristic. While going into either case would take up far too much room here the basic idea behind each is to use knowledge about the solutions you've already got to be clever about the next case you choose so you can quickly find better values without having to search the \textit{whole} space. But this doesn't come for free as most optimization algorithms can't guarantee optimality. Instead you have to carefully understand their drawbacks and gotchas so that you can make it highly probably that a global maximum (or something very close to it) will be found. The point - know your optimizer! 
 \newpage
 
-Cite:
-textbook
+\noindent \rule{\textwidth}{0.5pt} 
+\begin{figure}[h!] 
+  \includegraphics[width=\linewidth]{drawings/high_level.png}
+  \caption{30,000ft View}
+  \label{fig:high_level}
+\end{figure}
+\newline
+\rule{\textwidth}{0.5pt} 
+\vspace{5pt}
+
+Hopefully at this point it's at least somewhat clear how this big problem breaks up into individual pieces. We've got models that drive our optimization, instrumentation creating ground truth data used to fit those models, and then the optimization itself. Put these together and you can find the right set of fishing parameters to maximize the long term value of the fishery. 
+\newline
+
+However it should also be clear how all of this is \textit{entirely} dependent on the models used and the fishing parameters chosen. So the question becomes - what can go wrong with the modeling itself? We turn to that next. 
+
+
+\newpage
 
 
 \section{Risky Business}
@@ -194,7 +275,8 @@ textbook
 \section{Cartography}
 
 
-
+Cite:
+textbook
 \bibliographystyle{plain}
 \bibliography{reference}
 \end{document}

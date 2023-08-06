@@ -5,3 +5,4 @@
 *.gz
 *.toc
 .devcontainer
+.DS_Store
