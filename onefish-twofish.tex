@@ -337,6 +337,233 @@ At this point we've covered a lot of ground. We've got models that drive our opt
 However through all of that something should have become frighteningly clear - all of this is \textit{entirely} dependent on the models used. And so an obvious question comes walking, nay barging - existential sword in hand - through the door - what can go wrong with the modeling itself? We turn to that next. 
 \newpage
 
+\section{Risky Business}
+To understand the things that can go wrong when using predictive models we need a model to poke and prod at. One particularly classic model that's really useful in illustrating some fundamental fisheries concepts is Schaefer's surplus production model. So let's go ahead and use that one to get the most bang for our buck.
+\newline
+
+All models are a simplification of reality, it's what makes them both very useful (imagine trying to play god while following every atom in this universe) and rather dangerous (sometimes the details matter in ways you don't expect). Simplification means assumptions that don't necessarily line up perfectly with reality. So let's start with what Schaefer's model assumes. 
+\newline
+
+First the model assumes a kind of \textbf{reproductive stability} wherein the number of individuals joining the population each year is precisely the same fraction of the fecund population each and every year. If $P_F$ is the population capable of producing baby fish (the fecund population) and the offspring $P_O$ then this assumption looks like the following in math-speak:
+
+$$P_O = \gamma P_F$$
+
+Now keeping track of two separate populations is a lot of work so the next simplifying assumption the model makes is one of \textbf{demographic stability} wherein the proportion of the population that is fecund remains constant as time rolls on and the population grows and shrinks in response to whatever's going on in the environment. Translating this as well, then if $P$ is the overall population we have:
+
+$$P_F = \alpha P$$
+
+Stability is a wonderful thing so let's go for a triad - \textbf{biomass stability}. This assumption entails making the leap that the average weight per fish is also a constant (given we're assuming demographic stability this isn't actually that much of a leap if you think about it - barring starved fish the average size remaining constant per age group is a pretty commonly held assumption in fisheries science). If the average size per fish is constant than biomass, $B$, and population are more or less indicating the same thing:
+
+$$P = \beta B$$
+
+Combining our three stability assumptions together we get:
+
+$$P_O = \gamma \alpha \beta B \rightarrow B_O = \gamma \alpha B $$
+
+which leads us right into:
+
+$$B_{t+1} = B_{t} + rB_t$$
+
+where $r=\gamma \alpha$ is the growth ratio. 
+\newline
+
+\begin{figure}[h!] 
+  \includegraphics[width=\linewidth]{notebooks/SurplusModels/exponential_growth.png}
+  \caption{Unconstrained Growth}
+  \label{fig:unconstrained_growth}
+\end{figure}
+
+Enough math, let's get a picture! Fig. \ref{fig:unconstrained_growth} shows us what the model would give us for year over year growth and something is clearly wrong - the biomass is rocketing for the stars! That's because this growth is entirely unconstrained it's as if the fish have limitless access to food, space, and have absolutely no predation pressure. No one is dying, no one is hungry - these fish have found utopia!
+\newline
+
+
+
+Unfortunately the secrets for utopia don't exist in fishy hands and many things prevent this kind of exponential growth. One such concept is the idea of a carrying capacity $B_{\infty}$. This is the point at which the ecosystem has had its full of this particular kind of fish and can take no more. Schaefer's model assumes that this ceiling exerts a kind of linearly increasing pressure on the population that grows so oppressive once the population reaches $B_\infty$ that no more growth is possible at that point. This pressure is defined by a multiplier on our growth ratio $r$ that looks like:
+
+$$(1-B/B_\infty)r$$
+
+To see how this gives our "carrying capacity pressure" consider what happens when $B=0$, at this point we have $(1-0/B_\infty)r=r$ so the growth ratio is able to steam full ahead. As the population grows and we reach $B=B_\infty / 2$ we end up with $(1-1/2)r =0.5r$ - the growth rate coefficient has been reduced to half its true power. Finally when the population does in fact reach the carrying capacity $B=B_\infty$ then we get $(1-1)r=0$ and growth has become impossible. All in all a nice, linear modification in the growth coefficient. We now have:
+
+$$B_{t+1} = B_{t} + (1 - B_t/B_\infty)rB_t$$
+
+\begin{figure}[h!] 
+  \includegraphics[width=\linewidth]{notebooks/SurplusModels/capped_growth.png}
+  \caption{Constrained Growth}
+  \label{fig:constrained_growth}
+\end{figure}
+
+Fig. \ref{fig:constrained_growth} gives us what happens when we enforce a $B_\infty = 5$ on our prior unconstrained growth curves. Now we can see them leveling out nicely at $B_\infty$ - just as we wanted!
+\newline
+
+At this point our fish are gliding up to their carrying capacity, and then, with a fully fledged stable population are contemplating their own mortality as year after year new fish join the population and old ones move onto the fishy beyond. However this peaceful stability is about to end in the sound of diesel engines and the surprise of finding delicious food containing and devastating, hookish surprise. The fishers are on their way!
+\newline
+
+Instead of assuming a nice steady fishing mortality like we did last time we're going to assume that these fishers are out to take as much fish as they possible can and are limited only by a fishing cap imposed by us their trust fisheries scientists. So the question now is - what limit should we place? To find out let's model forward with a couple different catch limits. Assuming $r=0.5$ and $B_\infty=5$ we can see what happens in Fig. \ref{fig:adding_the_fishers}.
+\newline
+
+\begin{figure}[h!] 
+  \includegraphics[width=\linewidth]{notebooks/SurplusModels/adding_the_humans.png}
+  \caption{Adding the Fishers}
+  \label{fig:adding_the_fishers}
+\end{figure}
+
+There's a lot to learn from these three curves. We can clearly see that we want to avoid $C=0.75$ the fish stock is clearly on the way to oblivion and our commitment to the long term would vanish like a puff of smoke. However the other two look pretty stable. That being said, $C=0.1$ seems like it's unnecessarily conservative. We catch only a sixth of the fish as in the case of $C=0.6$ yet it's no more stable as both glide into a new happy state of stasis. So why is it that up to a limit we can just fish more and more until suddenly the stock just goes into free fall? How might we tow that line as closely as possible?
+\newline
+
+If we turn back to our model we have the following:
+
+$$B_{t+1} = B_t + (1 - B_t/B_\infty)rB_t - C$$
+
+From this we can see that the catch $C$ is competing with the growth $(1 - B/B_\infty)rB$. Let's plot the growth as a function of biomass to see if we can get any hints as to what might be going on (Fig. \ref{fig:growth_v_biomass}).
+\newline
+
+\begin{figure}[h!] 
+  \includegraphics[width=\linewidth]{notebooks/SurplusModels/surplus_yield.png}
+  \caption{Growth v Biomass}
+  \label{fig:growth_v_biomass}
+\end{figure}
+
+Fascinating! The growth has a very clear maximum at precisely $B=B_\infty / 2$. Now we can understand what was changing between our different catch limits. When $C=0.1$ we never put enough pressure to drive the population down to $B=B_\infty / 2$ and so we stayed stuck with our small catch. However when we cranked things all the way up to $C=0.75$ we not only drove our population to $B=B_\infty / 2$ but we missed our exit and went flying past straight toward extinction! No level of biomass could support such a catch with equivalent growth. However at the sweet spot we have a growth of:
+
+$$(1-(B_\infty/2) / B_\infty)r(B_\infty /2) = rB_\infty / 4$$
+
+which happens to be $0.5 \bullet 5 / 4 = 0.625$ in our case. So $C=0.6$ was very nearly the sweet spot!
+\newline
+
+In general though, the conclusion we've come to is that under our Schaefer surplus production model the "best" catch is given by $rB_\infty / 4$. In general this "best" catch is called the maximum sustainable yield or MSY. 
+
+$$C_{MSY} = rB_\infty /4$$
+
+Clearly then, for a fishery we didn't just make up (and therefore have all the answers to) we have two parameters we need to fit - $r$ and $B_\infty$. Time to finally find out what can go wrong.
+
+\subsection{Model Risk}
+
+I'm going to take a leaf out of a wonderful textbook - \textit{Fisheries Biology, Assessment, and Management} by King - and use the example they give to present the Schaefer's surplus production model to instead present just how risky these things can get. 
+\newline
+
+Alright so what kind of data do we have from the book? What's our ground truth look like? Fig. \ref{fig:catch_v_effort} shows us what we've got to work with. 
+\newline
+
+\begin{figure}[h!] 
+  \includegraphics[width=\linewidth]{notebooks/SurplusModels/measurements.png}
+  \caption{Catch v Effort}
+  \label{fig:catch_v_effort}
+\end{figure}
+
+Hmmm... this doesn't seem right at all - we need biomass over time and instead we've got catch versus effort? Well this is a pretty common problem in fisheries science - you want one kind of data but only realize you need it now because you've started doing the fisheries science properly and surprise surprise no one thought to collect that data (or perhaps that data is just impossible to come by - I don't know about you, but measuring every fish in the sea seems like a bit of a monumental task...). 
+\newline
+
+Ok, so we've got to work with what we've got. Perhaps there's some assumption we can make to connect these data to what we actually need? Time for a couple more assumptions.
+\newline
+
+First we need to introduce the notion of catch per unit effort or CPUE. Effort is usually quantified in something specific to the fishery like number of lobster pots used, time spent out fishing, miles of line used, and so on. Weird but practical. So if effort was, say, miles of line used, the CPUE tells how much catch we can expect from a mile of line. Letting $f$ be the effort we have in math-speak:
+
+$$C = f\bullet CPUE$$
+
+With this concept in mind we can now enter the assumption that's going to allow us to use catch and effort data to fit our surplus model. And that's that the amount of effort required to catch something is directly proportional to the amount of fish in the ocean:
+
+$$CPUE = qB$$
+
+This makes intuitive sense - it becomes easier to catch something the more fish there are to catch. 
+\newline
+
+Let's now see how this helps us. Replacing $C$ in our original model with $C=fqB$ we get:
+
+$$B_{t+1} = B_t + (1 - B/B_\infty)rB_T - qf_tB_t$$
+
+Alrighty! We now have four parameters - $r$, $B_\infty$, $B_0$, and $q$ - but can now use our measured fishing effort $f$ to compute the biomass year over year (assuming we know when these catches happened, which lo and behold we do!) and then can use the predicted biomass $B_t$ to predict the catch $C_t = qfB_t$. In other words, given our input variable $f_t$ we can predict our output variable $C_t$ - we can now fit our model! Pretty darn clever. 
+\newline
+
+Using a standard optimization library, \textit{scipy.optimize}, from the computing language Python I ended up with $r=0.6766$, $B_\infty = 4001$, $B_0 =2884$, and $q=4.29\bullet 10^{-6}$. From this we can derive our $C_{MSY}\approx 676$.
+\newline
+
+Alright, you ask, what's the problem? All of this seems to have gone rather smoothly. Sure, until you look at the data... let's plot the predicted catches vs the actual catches (Fig. \ref{fig:predictions_surplus})
+\newline
+
+\begin{figure}[h!] 
+  \includegraphics[width=\linewidth]{notebooks/SurplusModels/model_scatter.png}
+  \caption{Catch v Effort}
+  \label{fig:predictions_surplus}
+\end{figure}
+
+My oh my those points are all over the place! Let's compute the distance between the predictions and the actuals (also known as absolutely error) and look at the distribution of the errors (Fig. \ref{fig:predictions_surplus_dist})
+\newline
+
+\begin{figure}[h!] 
+  \includegraphics[width=\linewidth]{notebooks/SurplusModels/model_dist.png}
+  \caption{Error Distribution}
+  \label{fig:predictions_surplus_dist}
+\end{figure}
+
+This distribution peaks around 80 or so which is still $>10\%$ of most of our recorded catches! And here, smack dab in front of us is the first kind of risk inherent in modeling - the risk inherent in the fact that our predictions aren't perfect. Every model is like this, because it is a simplification of reality they \textit{never} predict things perfectly accurately. However this inaccuracy has real consequences. 
+\newline
+
+For example in our case if we assume we must allow for 10\% error in our predictions then we should allow for an equivalent kind of error in the prediction of $C_{MSY}$, and because overestimating $C_{MSY}$ means a decimated fishery we need to provide estimates that are on the conservative side. But that means telling fishers whose livelihood depend on the catch that for every ten fish they used to catch under our initial estimate that they need to through back 1 and forsake 10\% of their income because our model is not quite hitting the mark. I certainly don't envy the person having to give that news! 
+\newline
+
+Obviously then one important quality of a model is how tight those error bars are - the smaller we can shrink the range the less we have to take away from the livelihoods of good folks. However, unfortunately the risk doesn't end there. 
+
+\subsection{Instrumentation Risk}
+
+So far we've been assuming our ground truth is exactly - the absolute truth. However for anyone who's messed around with scales, taken measurements in a lab, or just generally tried to measure anything you'll know better than to assume this. Even the old adage - measure twice, cut once - comes from a common knowledge that measurements are error prone. 
+\newline
+
+This should send a shiver down your spine. Our $r$ and $B_\infty$ are quite dependent on the data we fit to - if that data isn't quite right, neither will be our parameter estimates. And if our parameter estimates are wrong then our $C_{MSY}$ will likely be wrong too... So obviously we need to quantify the risk here too. 
+\newline
+
+We can do this by introducing noise into the ground truth data given to us and seeing how it changes our estimates of $C_{MSY}$. Specifically we will randomly shift each ground truth point from the book up or down by 10\%, fit our model, calculate $C_{MSY}$, and repeat until we can get a distribution of possible $C_{MSY}$ values if we assume some error. Fig \ref{fig:instrumentation_error} shows us what we get.
+\newline
+
+\begin{figure}[h!] 
+  \includegraphics[width=\linewidth]{notebooks/SurplusModels/instrumentation.png}
+  \caption{Variation in $C_{MSY}$}
+  \label{fig:instrumentation_error}
+\end{figure}
+
+Well it's a good thing we checked this! For one thing our original estimate of $C_{MSY}=676$ was actually on the high end! If we wanted to be conservative we clearly need to choose an $C_{MSY}$ closer to 600 which is once again a $\approx 10\%$ reduction in catch and therefore revenue for our fishers. Thinking about the fact that fisheries often get valued in the 10's of millions it makes a lot of sense to improve the instrumentation and therefore shrink these error bars if possible. 10\% of a million is a \textit{lot} of money. 
+\newline
+
+\subsection{Ontological Risk}
+
+So far we've been discussing what can wrong with the modeling process assuming that our model is the right one. However there's a lot of reason to doubt a lot of the assumptions we just made. We assumed demographic stability - if gear selectivity changes year by year this assumption will break down. We assumed that the ease of catch is just a function of biomass - what about technological developments? We also assumed absolutely no randomness in the amount of recruitment that happens each year - what if the fish just have a bad year for some reason? These are all ontological risks - risks associated with making wrong assumptions that lead you to predict things that are just completely and entirely false. 
+\newline
+
+As a clear example we're assuming that once a population is at $B=B_\infty / 2$ it will always produce a specific yield of new recruits that we can fish completely. However what if the fish just have a bad year and they aren't able to keep up with our $C_{MSY}$? The result is devastating, they end up falling below that peak growth point and forever more will never be able to keep up with our prescribed fishing pressure and practically start running straight toward oblivion. 
+\newline
+
+Another example is the assumption that no matter how small the population gets, it will always try to grow. But we know from research on genetics that there is a smallest population beyond which there simply isn't enough genetic diversity to keep the population alive and healthy. Where is that point? This model has no flipping clue. 
+\newline
+
+Ontological risks are the most terrifying because rather than requiring us to be conservative they pose the existential risk that something we're forgetting will drive a population straight into the ground. Therefore ontological risks have to be taken with the utmost seriousness and steps need to be taken to evaluate both the risk and whether it is worth investing in new models and/or instrumentation to just side step the risk entirely and retire some particularly dubious assumptions. 
+
+\subsection{Reducing Risk}
+Alright what's the point of all of this doom and gloom? It's simple, if we were able to remove all risks from our modeling and optimization then we'd just run the fisheries optimization year after year after year and nothing would need to be done. The technical progress in fisheries science is all about reducing these risks. That's why new models, optimizations, and data are introduced - simply to reduce these four kinds of risk:
+
+\begin{enumerate}
+\item Model Risk
+\item Instrumentation Risk
+\item Ontological Risk
+\item Optimization Risk
+\end{enumerate}
+
+And voila we have a clear way of evaluating and organizing what kinds of technical progress needs to happen within a specific fishery. Identify the risk, categorize it, evaluate its import to the fishery, and then in order of most pressing needs play whack-a-mole. 
+\newpage
+
+\section{Unparalleled Progress}
+
+How do you allow progress to happen in all of these spots without creating friction between different groups? 
+
+
+
+
+
+
+
+
+
+
+
+
 \bibliographystyle{plain}
 \bibliography{reference}
 \end{document}
