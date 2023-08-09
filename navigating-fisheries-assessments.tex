@@ -7,17 +7,20 @@
 \usepackage[super]{nth}
 \usepackage{float}
 
-\title{One Fish, Two Fish}
+\title{Navigating Fisheries Assessments}
 \author{Marcel Gietzmann-Sanders}
 \date{}
 \setcounter{tocdepth}{1}
 \begin{document}
 \maketitle
+\newpage
+
+One day I downloaded an Atlantic Herring Stock Assessment. Then I looked at the page count. Over 300 pages of delicious technical detail. That's when I realized I needed a map. This is the first one. Hope it helps.
+
 \tableofcontents
 \newpage
-\chapter{How to Digest a Brick}
 
-\section{Well What's the Point?}
+\chapter{Well What's the Point?}
 
 Quantitative fisheries science (hereafter referred to just as fisheries modeling) is all about the following question:
 \newline
@@ -140,7 +143,7 @@ Alright, with all of that in mind I think our question is looking a little bit d
 So, what's needed to make this happen? Well wouldn't you know? By a wonderful coincidence that just happens to be what the next section is about. 
 \newpage
 
-\section{The 30,000 Foot View}
+\chapter{The 30,000 Foot View}
 
 \noindent \rule{\textwidth}{0.5pt} 
 \begin{figure}[h!] 
@@ -337,7 +340,7 @@ At this point we've covered a lot of ground. We've got models that drive our opt
 However through all of that something should have become frighteningly clear - all of this is \textit{entirely} dependent on the models used. And so an obvious question comes walking, nay barging - existential sword in hand - through the door - what can go wrong with the modeling itself? We turn to that next. 
 \newpage
 
-\section{Risky Business}
+\chapter{Risky Business}
 To understand the things that can go wrong when using predictive models we need a model to poke and prod at. One particularly classic model that's really useful in illustrating some fundamental fisheries concepts is Schaefer's surplus production model. So let's go ahead and use that one to get the most bang for our buck.
 \newline
 
@@ -436,7 +439,7 @@ $$C_{MSY} = rB_\infty /4$$
 
 Clearly then, for a fishery we didn't just make up (and therefore have all the answers to) we have two parameters we need to fit - $r$ and $B_\infty$. Time to finally find out what can go wrong.
 
-\subsection{Model Risk}
+\section{Model Risk}
 
 I'm going to take a leaf out of a wonderful textbook - \textit{Fisheries Biology, Assessment, and Management} by King - and use the example they give to present the Schaefer's surplus production model to instead present just how risky these things can get. 
 \newline
@@ -503,7 +506,7 @@ For example in our case if we assume we must allow for 10\% error in our predict
 
 Obviously then one important quality of a model is how tight those error bars are - the smaller we can shrink the range the less we have to take away from the livelihoods of good folks. However, unfortunately the risk doesn't end there. 
 
-\subsection{Instrumentation Risk}
+\section{Instrumentation Risk}
 
 So far we've been assuming our ground truth is exactly - the absolute truth. However for anyone who's messed around with scales, taken measurements in a lab, or just generally tried to measure anything you'll know better than to assume this. Even the old adage - measure twice, cut once - comes from a common knowledge that measurements are error prone. 
 \newline
@@ -523,7 +526,7 @@ We can do this by introducing noise into the ground truth data given to us and s
 Well it's a good thing we checked this! For one thing our original estimate of $C_{MSY}=676$ was actually on the high end! If we wanted to be conservative we clearly need to choose an $C_{MSY}$ closer to 600 which is once again a $\approx 10\%$ reduction in catch and therefore revenue for our fishers. Thinking about the fact that fisheries often get valued in the 10's of millions it makes a lot of sense to improve the instrumentation and therefore shrink these error bars if possible. 10\% of a million is a \textit{lot} of money. 
 \newline
 
-\subsection{Ontological Risk}
+\section{Ontological Risk}
 
 So far we've been discussing what can wrong with the modeling process assuming that our model is the right one. However there's a lot of reason to doubt a lot of the assumptions we just made. We assumed demographic stability - if gear selectivity changes year by year this assumption will break down. We assumed that the ease of catch is just a function of biomass - what about technological developments? We also assumed absolutely no randomness in the amount of recruitment that happens each year - what if the fish just have a bad year for some reason? These are all ontological risks - risks associated with making wrong assumptions that lead you to predict things that are just completely and entirely false. 
 \newline
@@ -536,7 +539,7 @@ Another example is the assumption that no matter how small the population gets, 
 
 Ontological risks are the most terrifying because rather than requiring us to be conservative they pose the existential risk that something we're forgetting will drive a population straight into the ground. Therefore ontological risks have to be taken with the utmost seriousness and steps need to be taken to evaluate both the risk and whether it is worth investing in new models and/or instrumentation to just side step the risk entirely and retire some particularly dubious assumptions. 
 
-\subsection{Reducing Risk}
+\section{Reducing Risk}
 Alright what's the point of all of this doom and gloom? It's simple, if we were able to remove all risks from our modeling and optimization then we'd just run the fisheries optimization year after year after year and nothing would need to be done. The technical progress in fisheries science is all about reducing these risks. That's why new models, optimizations, and data are introduced - simply to reduce these four kinds of risk:
 
 \begin{enumerate}
@@ -549,21 +552,71 @@ Alright what's the point of all of this doom and gloom? It's simple, if we were 
 And voila we have a clear way of evaluating and organizing what kinds of technical progress needs to happen within a specific fishery. Identify the risk, categorize it, evaluate its import to the fishery, and then in order of most pressing needs play whack-a-mole. 
 \newpage
 
-\section{Unparalleled Progress}
+\chapter{Unparalleled Progress}
 
-How do you allow progress to happen in all of these spots without creating friction between different groups? 
+I hope at this point it's become apparent just how sprawling these kinds of problems. We've identified at least ten different problems (3 models $\times$ 3 kinds of risk $+$ finding the right kind of optimization) and have to really talk about anything in any real detail - all of our conclusions have been from the relative safety of 30,000ft. In other words - this is a big problem - a big enough problem that no single soul is really going to have a chance at overcoming it. 
+\newline
 
+However there's another problem - if you just try to start piling more people in you're quickly going to end up in a too many cooks in the kitchen situation. After 2 or 3 people trying to make the same pot of spaghetti at once is not helping anyone... So what are we to do? Well it turns out that our illustration of just how overwhelming this problem is is part of the solution. To see how let's think about making a sweater.
+\newline
 
+Long ago, before the industrial revolution, when you wanted to make a sweater you started with a sheep. Out you'd go to shear a whole bunch of them to get the wool you'd need for sweater. Once the wool is off the sheep you then have to go about first washing it, then spinning it into yarn, and if you were lucky you'd dye it too. At this point you have a bunch of yarn which is pretty great. Now that you have the yarn you're going to grab a pattern and start knitting the sweater itself. After quite a long time you'll then finally have your sweater! 
+\newline
 
+As you can imagine this whole process takes many, many months. If you include actually raising the sheep itself the time stretches out to years! And this is because of the simple fact that by making it one, long, holistic process only one person is really working on the sweater at any one time. 
+\newline
 
+Now some folks will say that steam power was the greatest outcome from the industrial revolution. However, in my mind, steam's power pales in comparison to the true star development of the industrial revolution - hyper specialization. The reason you can go to a store and get a sweatshirt for \$25 is because that long process we described before was split into components, those components were split into components, and then people over time have driven each of those kinds of work to the utmost limits of efficiency.
+\newline
 
+To go back to our cooking example, while it is true that trying to get 8 people to make a single pot of pasta is just going to end up with broken friendships and sore egos, if you divide the pasta making process into going to the grocery store, making the pasta itself from flour and eggs (oh how fancy), prepping the ingredients for the sauce, boiling the pasta itself, and serving the pasta to hungry customers who probably need service as well, then you can easily employ 8 people and be kicking out pasta at a speed that will seem unbelievable to the two trying to do everything by themselves. 
+\newline
 
+The key here is that you've divvied the problem into independent components that have very clear interfaces between one another and otherwise don't have to worry about anything outside of their component at all.
+\newline
 
+And there's another huge benefit to this kind of specialization. If you're trying to make all the pasta by yourself, do the shopping by yourself, doing the service by yourself, you're probably not going to do any of those things particularly well because you're so busy trying to juggle it all. Master of None as the saying goes. But if all you have to worry about is, say, grocery shopping - then you can pick up loads of grocery shopping tricks. You can start to learn when's the right time to buy certain things, how to provide enough stock to keep things running but not to much that there's unnecessary waste, which stores have the best prices for specific things, and so on. This is a level of detail the generalist can never hope to achieve - certainly not across every single division of their work. So not only do you get more people on the job but those people can innovate on the job \textit{so much more}. 
+\newline
 
+And this is why we've spent so much time going over how this fisheries science problem divvies up into different parts and problems. If two or three people can work at a problem at a time then even our 30,000ft view of the divisions means that instead of two or three people on the problem we can have 20 to 30! And the subdividing needn't stop where we've left off - all we've done is provided a formula for subdivision. For example, suppose you're looking at the population modeling component. This can probably be divided itself among recruitment modeling, age to weight modeling, mortality modeling, and so on. And each of these is going to inherit those three risks implicit in the instrumentation, modeling, and ontology. The key is to make sure that whatever the subdivisions they provide the ingredients for specialization - clear interfaces and independence of problems. 
+\newline
 
+Which brings me to one last point. Suppose I'm working on trying to improve a recruitment model and I want to evaluate the benefits of what I'm attempting to do. It would be a real bother if I had to pull together a summit of the dozens of folks working on the other components of the problem just to run things through the whole gamut and get a sense of how this effects the "bottom-line" of the fishery. This definitely would put a whole barrier on the independence bit of specialization.
+\newline
 
+Instead what I need is to be able to plug my new component into the overall workflow and run it myself. Think of it like being able to pop a new light into your house, flipping the lights on, and seeing whether the new bulb does the trick. If you had to rewire the electrics in the whole house every time, or had to worry about blowing things downstairs with a light bulb upstairs you'd probably rarely (and quite fearfully) try to make any updates. Likewise I need to be able to plug my new model in, flip a switch, and see what effect it makes to the whole. With that in place I can happily go about working on my piece enjoying the independence that powers specialization.
+\newline
 
+This then is the goal, to take fisheries modeling, subdivide it into neat, independent components with lovely, abstract, and neat interfaces tied together in a single plug and play workflow that allows dozens of people to work on the same overall problem all at once. 
+\newline
 
-\bibliographystyle{plain}
-\bibliography{reference}
+Hopefully the outline herein provides a useful place to start. 
+
+\chapter{Questions to Ask Yourself}
+
+\section{Knowing What's There}
+
+\begin{itemize}
+\item What are the management parameters?
+\item What are the benefits?
+\item Who is the society under consideration?
+\item How are the benefits balanced?
+\item Is this instrumentation or modeling?
+\item Which model does this belong to? Population, catch, or benefit?
+\item Do the models subdivide into component models? 
+\item What are the model inputs, outputs, and parameters?
+\item How are they fitting the model?
+\item How are they optimizing the management parameters?
+\end{itemize}
+
+\section{Knowing What's Not There}
+\begin{itemize}
+\item What management parameters are missing?
+\item What are the risks with this optimization technique?
+\item What are the risks with these fitting techniques?
+\item What are the instrumentation, model, and ontological risks?
+\item What benefits are ignored?
+\item How's not represented?
+\end{itemize}
+
 \end{document}
